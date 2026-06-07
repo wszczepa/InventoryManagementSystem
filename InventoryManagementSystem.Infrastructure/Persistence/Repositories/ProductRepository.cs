@@ -1,8 +1,5 @@
 ﻿using InventoryManagementSystem.Domain.Products;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace InventoryManagementSystem.Infrastructure.Persistence.Repositories
 {
@@ -13,7 +10,7 @@ namespace InventoryManagementSystem.Infrastructure.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task AddAsync(Product product)
+        public async Task CreateAsync(Product product)
         {
             await _context.Products.AddAsync(product);
         }
@@ -21,6 +18,13 @@ namespace InventoryManagementSystem.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Products.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetAsync(IEnumerable<int> ids)
+        {
+            return await _context.Products
+                .Where(p => ids.Contains(p.ProductId))
+                .ToListAsync();
         }
     }
 }

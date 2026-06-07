@@ -1,8 +1,8 @@
-﻿
-using InventoryManagementSystem.Api.Contracts.Products;
-using InventoryManagementSystem.Application.Products.Command.AddProduct;
+﻿using InventoryManagementSystem.Api.Contracts.Products;
+using InventoryManagementSystem.Application.Products.Command.CreateProduct;
 using InventoryManagementSystem.Application.Products.Queries.GetAllProducts;
 using InventoryManagementSystem.Application.Shared.Messaging.Dispatching;
+
 
 namespace InventoryManagementSystem.Api.Endpoints
 {
@@ -24,7 +24,7 @@ namespace InventoryManagementSystem.Api.Endpoints
         public static async Task<IResult> CreateProduct(CreateProductRequest request, IDispatcher dispatcher)
         {
 
-            var command = new AddProductCommand(request.Name, request.Description, request.Price, request.Stock);
+            var command = new CreateProductCommand(request.Name, request.Description, request.Price, request.Stock);
             var id = await dispatcher.SendAsync(command);
             return Results.Ok(id);
         }

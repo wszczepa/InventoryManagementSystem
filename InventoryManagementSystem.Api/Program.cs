@@ -41,6 +41,7 @@ namespace InventoryManagementSystem.Api
             app.MapControllers();
 
             app.MapProductEndpoints();
+            app.MapOrderEndpoints();
 
             app.Run();
         }

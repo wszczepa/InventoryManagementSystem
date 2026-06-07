@@ -1,9 +1,4 @@
-﻿using InventoryManagementSystem.Domain.Products;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace InventoryManagementSystem.Domain.Orders
+﻿namespace InventoryManagementSystem.Domain.Orders
 {
     public class Order
     {

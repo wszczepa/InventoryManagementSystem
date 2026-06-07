@@ -1,20 +1,21 @@
-﻿using InventoryManagementSystem.Application.Shared.Messaging;
+﻿using InventoryManagementSystem.Application.Products.Command.CreateProduct;
+using InventoryManagementSystem.Application.Shared.Messaging;
 using InventoryManagementSystem.Domain.Products;
 using InventoryManagementSystem.Infrastructure.Persistence;
 
 namespace InventoryManagementSystem.Application.Products.Command.AddProduct
 {
-    public class AddProductCommandHandler : ICommandHandler<AddProductCommand, int>
+    public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, int>
     {
         private readonly IProductRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AddProductCommandHandler(IProductRepository repository, IUnitOfWork unitOfWork)
+        public CreateProductCommandHandler(IProductRepository repository, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
         }
-        public async Task<int> HandleAsync(AddProductCommand command, CancellationToken cancellationToken = default)
+        public async Task<int> HandleAsync(CreateProductCommand command, CancellationToken cancellationToken = default)
         {
             var product = new Product
             {
@@ -24,7 +25,7 @@ namespace InventoryManagementSystem.Application.Products.Command.AddProduct
                 Stock = command.Stock
             };
 
-            await _repository.AddAsync(product);
+            await _repository.CreateAsync(product);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return product.ProductId;

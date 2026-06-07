@@ -2,6 +2,7 @@
 using InventoryManagementSystem.Api.Endpoints;
 
 using InventoryManagementSystem.Application;
+using InventoryManagementSystem.Domain;
 using InventoryManagementSystem.Infrastructure;
 
 namespace InventoryManagementSystem.Api
@@ -18,7 +19,8 @@ namespace InventoryManagementSystem.Api
             builder.Services.AddOpenApi();
 
             builder.Services.AddApplication()
-                .AddInfrastructure(builder.Configuration);
+                .AddInfrastructure(builder.Configuration)
+                .AddDomain();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             

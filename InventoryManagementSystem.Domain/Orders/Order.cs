@@ -28,7 +28,11 @@ namespace InventoryManagementSystem.Domain.Orders
 
         public IEnumerable<OrderItem> Items => _items;
 
-        public void AddItem(int productId, int quantity)
+        public decimal Subtotal { get; private set; }
+        public decimal Discount { get; private set; }
+        public decimal Total { get; private set; }
+
+        public void AddItem(int productId, int quantity, decimal unitPrice, decimal finalPrice)
         {
             if (productId <= 0)
                 throw new DomainException("Invalid product id.");
@@ -36,7 +40,17 @@ namespace InventoryManagementSystem.Domain.Orders
             if (quantity <= 0)
                 throw new DomainException("Quantity must be greater than 0.");
 
-            _items.Add(new OrderItem(productId, quantity));
+            if (unitPrice < 0)
+                throw new DomainException("Unit price cannot be negative.");
+
+            _items.Add(new OrderItem(productId, quantity, unitPrice, finalPrice));
+        }
+
+        public void ApplyPricing(decimal discount)
+        {
+            Subtotal = _items.Sum(i => i.Quantity * i.FinalUnitPrice);
+            Discount = discount;
+            Total = Subtotal - Discount;
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using InventoryManagementSystem.Domain.Exceptions;
-using InventoryManagementSystem.Domain.Orders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace InventoryManagementSystem.Domain.Customers
 {
@@ -12,7 +8,7 @@ namespace InventoryManagementSystem.Domain.Customers
         {
         }
 
-        public Customer(string name, string lastName, string location)
+        public Customer(string name, string lastName, CustomerRegion region)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new DomainException("Name is required");
@@ -20,12 +16,9 @@ namespace InventoryManagementSystem.Domain.Customers
             if (string.IsNullOrWhiteSpace(lastName))
                 throw new DomainException("LastName is required");
 
-            if (string.IsNullOrWhiteSpace(location))
-                throw new DomainException("Location is required");
-
             Name = name;
             LastName = lastName;
-            Location = location;
+            Region = region;
         }
 
         public int CustomerId { get; private set; }
@@ -34,6 +27,6 @@ namespace InventoryManagementSystem.Domain.Customers
 
         public string LastName { get; private set; } = null!;
 
-        public string Location { get; private set; } = null!;
+        public CustomerRegion Region { get; private set; }
     }
 }

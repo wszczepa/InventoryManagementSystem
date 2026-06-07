@@ -9,6 +9,10 @@ namespace InventoryManagementSystem.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.HasKey(c => c.CustomerId);
+
+            builder.Property(x => x.Region)
+                .HasConversion<int>()
+                .IsRequired();
         }
     }
 }

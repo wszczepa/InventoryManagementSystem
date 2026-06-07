@@ -1,4 +1,5 @@
-﻿using InventoryManagementSystem.Domain.Orders;
+﻿using InventoryManagementSystem.Domain.Customers;
+using InventoryManagementSystem.Domain.Orders;
 using InventoryManagementSystem.Domain.Products;
 using InventoryManagementSystem.Infrastructure.Persistence;
 using InventoryManagementSystem.Infrastructure.Persistence.Repositories;
@@ -19,6 +20,7 @@ namespace InventoryManagementSystem.Infrastructure
 
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
             return services;

@@ -1,4 +1,6 @@
-﻿using InventoryManagementSystem.Application.Shared.Messaging;
+﻿using Azure.Core;
+using InventoryManagementSystem.Application.Shared.Messaging;
+using InventoryManagementSystem.Domain.Exceptions;
 using InventoryManagementSystem.Domain.Orders;
 using InventoryManagementSystem.Domain.Products;
 using InventoryManagementSystem.Infrastructure.Persistence;
@@ -22,50 +24,25 @@ namespace InventoryManagementSystem.Application.Orders.Command
         {
             var products = await _productRepository.GetAsync(command.Items.Select(x => x.ProductId));
 
-            ValidateStock(command.Items, products.ToList());
-
-            var order = new Order
+            var order = new Order(command.CustomerId);
+           
+            foreach (var item in command.Items)
             {
-                CustomerId = command.CustomerId,
-                Items = command.Items.Select(i => new Domain.Orders.OrderItem
-                {
-                    ProductId = i.ProductId,
-                    Quantity = i.Quantity
-                }).ToList()
-            };
+                var product = products.FirstOrDefault(x => x.ProductId == item.ProductId)
+                    ?? throw new DomainException(
+                        $"Product {item.ProductId} does not exist");
+
+                product.Reserve(item.Quantity);
+
+                order.AddItem(product.ProductId, item.Quantity);
+            }
 
             await _orderRepository.CreateAsync(order);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return order.OrderId;
 
-        }
-
-
-        private static void ValidateStock(
-            IEnumerable<OrderItem> items,
-            List<Product> products)
-        {
-            var failures = new List<string>();
-
-            foreach (var item in items)
-            {
-                var product = products.FirstOrDefault(x => x.ProductId == item.ProductId);
-
-                if (product is null)
-                {
-                    failures.Add($"Product {item.ProductId} does not exist");
-                    continue;
-                }
-
-                if (product.Stock < item.Quantity)
-                {
-                    failures.Add($"Not enough stock for product {product.ProductId}");
-                }
-            }
-
-            if (failures.Any())
-                throw new ValidationException(string.Join(", ", failures));
         }
  
     }

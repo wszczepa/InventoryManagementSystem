@@ -17,13 +17,7 @@ namespace InventoryManagementSystem.Application.Products.Command.AddProduct
         }
         public async Task<int> HandleAsync(CreateProductCommand command, CancellationToken cancellationToken = default)
         {
-            var product = new Product
-            {
-                Name = command.Name,
-                Description = command.Description,
-                Price = command.Price,
-                Stock = command.Stock
-            };
+            var product = new Product(command.Name, command.Description, command.Price, command.Stock);
 
             await _repository.CreateAsync(product);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

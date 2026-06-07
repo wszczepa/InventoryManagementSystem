@@ -120,43 +120,37 @@ namespace InventoryManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.Domain.Orders.Order", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.Domain.Customers.Customer", null)
-                        .WithMany("Orders")
+                    b.HasOne("InventoryManagementSystem.Domain.Customers.Customer", "Customer")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Domain.Orders.OrderItem", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.Domain.Orders.Order", null)
+                    b.HasOne("InventoryManagementSystem.Domain.Orders.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("InventoryManagementSystem.Domain.Products.Product", "Product")
-                        .WithMany("OrderItems")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
-                });
+                    b.Navigation("Order");
 
-            modelBuilder.Entity("InventoryManagementSystem.Domain.Customers.Customer", b =>
-                {
-                    b.Navigation("Orders");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Domain.Orders.Order", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.Domain.Products.Product", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

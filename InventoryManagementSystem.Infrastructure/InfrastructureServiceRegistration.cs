@@ -15,6 +15,7 @@ namespace InventoryManagementSystem.Infrastructure
         this IServiceCollection services,
         IConfiguration configuration)
         {
+            var c = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 

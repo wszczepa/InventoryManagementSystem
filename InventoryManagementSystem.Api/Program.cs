@@ -4,6 +4,7 @@ using InventoryManagementSystem.Api.Endpoints;
 using InventoryManagementSystem.Application;
 using InventoryManagementSystem.Domain;
 using InventoryManagementSystem.Infrastructure;
+using DotNetEnv;
 
 namespace InventoryManagementSystem.Api
 {
@@ -11,6 +12,9 @@ namespace InventoryManagementSystem.Api
     {
         public static void Main(string[] args)
         {
+
+            DotNetEnv.Env.Load();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

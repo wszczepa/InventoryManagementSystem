@@ -3,7 +3,7 @@ using InventoryManagementSystem.Domain.Pricing.Rules.DiscountRules.HolidayDiscou
 
 namespace InventoryManagementSystem.Domain.Pricing.Rules.DiscountRules.HolidayDiscountRule
 {
-    internal class HolidayDiscountRule : IDiscountRule
+    public class HolidayDiscountRule : IDiscountRule
     {
         private readonly IDateTimeProvider _clock;
         private readonly IHolidayCalendar _holidayCalendar;

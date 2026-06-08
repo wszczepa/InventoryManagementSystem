@@ -2,6 +2,8 @@
 using InventoryManagementSystem.Application.Products.Command.CreateProduct;
 using InventoryManagementSystem.Application.Products.Queries.GetAllProducts;
 using InventoryManagementSystem.Application.Shared.Messaging.Dispatching;
+using InventoryManagementSystem.Api.Common;
+using System.Linq;
 
 
 namespace InventoryManagementSystem.Api.Endpoints
@@ -18,15 +20,29 @@ namespace InventoryManagementSystem.Api.Endpoints
 
         public static async Task<IResult> GetProducts(IDispatcher dispatcher)
         {
-            var products = await dispatcher.QueryAsync(new GetAllProductsQuery());
-            return Results.Ok(products);
+            try
+            {
+                var products = await dispatcher.QueryAsync(new GetAllProductsQuery());
+                return Results.Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return ex.ToErrorResult();
+            }
         }
+
         public static async Task<IResult> CreateProduct(CreateProductRequest request, IDispatcher dispatcher)
         {
-
-            var command = new CreateProductCommand(request.Name, request.Description, request.Price, request.Stock);
-            var id = await dispatcher.SendAsync(command);
-            return Results.Ok(id);
+            try
+            {
+                var command = new CreateProductCommand(request.Name, request.Description, request.Price, request.Stock);
+                var id = await dispatcher.SendAsync(command);
+                return Results.Ok(id);
+            }
+            catch (Exception ex)
+            {
+                return ex.ToErrorResult();
+            }
         }
     }
 }

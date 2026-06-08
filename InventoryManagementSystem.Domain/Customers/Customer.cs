@@ -1,5 +1,4 @@
-﻿using InventoryManagementSystem.Domain.Exceptions;
-
+﻿
 namespace InventoryManagementSystem.Domain.Customers
 {
     public class Customer
@@ -11,10 +10,10 @@ namespace InventoryManagementSystem.Domain.Customers
         public Customer(string name, string lastName, CustomerRegion region)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new DomainException("Name is required");
+                throw new ArgumentException("Name is required", nameof(name));
 
             if (string.IsNullOrWhiteSpace(lastName))
-                throw new DomainException("LastName is required");
+                throw new ArgumentException("LastName is required", nameof(lastName));
 
             Name = name;
             LastName = lastName;

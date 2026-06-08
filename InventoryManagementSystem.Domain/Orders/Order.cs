@@ -1,6 +1,4 @@
 ﻿using InventoryManagementSystem.Domain.Customers;
-using InventoryManagementSystem.Domain.Exceptions;
-using InventoryManagementSystem.Domain.Products;
 
 namespace InventoryManagementSystem.Domain.Orders
 {
@@ -15,7 +13,7 @@ namespace InventoryManagementSystem.Domain.Orders
         public Order(int customerId)
         {
             if (customerId <= 0)
-                throw new DomainException("CustomerId must be greater than 0.");
+                throw new ArgumentException("CustomerId must be greater than 0.");
 
             CustomerId = customerId;
         }
@@ -35,13 +33,16 @@ namespace InventoryManagementSystem.Domain.Orders
         public void AddItem(int productId, int quantity, decimal unitPrice, decimal finalPrice)
         {
             if (productId <= 0)
-                throw new DomainException("Invalid product id.");
+                throw new ArgumentException("Invalid product id.", nameof(productId));
 
             if (quantity <= 0)
-                throw new DomainException("Quantity must be greater than 0.");
+                throw new ArgumentException("Quantity must be greater than 0.", nameof(quantity));
 
             if (unitPrice < 0)
-                throw new DomainException("Unit price cannot be negative.");
+                throw new ArgumentException("Unit price cannot be negative.", nameof(unitPrice));
+
+            if (finalPrice < 0)
+                throw new ArgumentException("Final price cannot be negative.", nameof(finalPrice));
 
             _items.Add(new OrderItem(productId, quantity, unitPrice, finalPrice));
         }

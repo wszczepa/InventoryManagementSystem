@@ -1,7 +1,4 @@
-﻿using InventoryManagementSystem.Domain.Exceptions;
-using InventoryManagementSystem.Domain.Orders;
-
-namespace InventoryManagementSystem.Domain.Products
+﻿namespace InventoryManagementSystem.Domain.Products
 {
     public class Product
     {
@@ -34,11 +31,10 @@ namespace InventoryManagementSystem.Domain.Products
         public void Reserve(int quantity)
         {
             if (quantity <= 0)
-                throw new DomainException("Quantity must be greater than zero.");
+                throw new ArgumentException("Quantity must be greater than zero.", nameof(quantity));
 
             if (Stock < quantity)
-                throw new DomainException(
-                    $"Not enough stock for product {ProductId}");
+                throw new ArgumentException($"Not enough stock for product {ProductId}");
 
             Stock -= quantity;
         }
@@ -46,7 +42,7 @@ namespace InventoryManagementSystem.Domain.Products
         public void Restock(int quantity)
         {
             if (quantity <= 0)
-                throw new DomainException("Quantity must be greater than zero.");
+                throw new ArgumentException("Quantity must be greater than zero.", nameof(quantity));
 
             Stock += quantity;
         }

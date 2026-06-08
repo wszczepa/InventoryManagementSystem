@@ -1,8 +1,6 @@
-﻿using Azure.Core;
-using InventoryManagementSystem.Application.Shared.Messaging;
+﻿using InventoryManagementSystem.Application.Shared.Messaging;
 using InventoryManagementSystem.Domain.Common;
 using InventoryManagementSystem.Domain.Customers;
-using InventoryManagementSystem.Domain.Exceptions;
 using InventoryManagementSystem.Domain.Orders;
 using InventoryManagementSystem.Domain.Pricing;
 using InventoryManagementSystem.Domain.Pricing.Rules.PriceModeifierRules;
@@ -33,7 +31,7 @@ namespace InventoryManagementSystem.Application.Orders.Command
         }
         public async Task<int> HandleAsync(CreateOrderCommand command, CancellationToken cancellationToken = default)
         {
-            var customer = await _customerRepository.GetByIdAsync(command.CustomerId) ?? throw new DomainException("Customer not found");
+            var customer = await _customerRepository.GetByIdAsync(command.CustomerId) ?? throw new KeyNotFoundException("Customer not found");
 
             var products = (await _productRepository.GetAsync(command.Items.Select(x => x.ProductId))).ToDictionary(x => x.ProductId);
 
@@ -42,7 +40,7 @@ namespace InventoryManagementSystem.Application.Orders.Command
             foreach (var item in command.Items)
             {
                 if (!products.TryGetValue(item.ProductId, out var product))
-                    throw new DomainException($"Product {item.ProductId} does not exist");
+                    throw new KeyNotFoundException($"Product {item.ProductId} does not exist");
 
                 product.Reserve(item.Quantity);
 

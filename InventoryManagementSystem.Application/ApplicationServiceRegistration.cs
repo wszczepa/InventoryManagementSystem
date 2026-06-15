@@ -2,10 +2,7 @@
 using InventoryManagementSystem.Application.Shared.Messaging;
 using InventoryManagementSystem.Application.Shared.Messaging.Dispatching;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace InventoryManagementSystem.Application
 {
@@ -18,7 +15,9 @@ namespace InventoryManagementSystem.Application
 
             RegisterHandlers(services, assembly, typeof(ICommandHandler<,>));
             RegisterHandlers(services, assembly, typeof(IQueryHandler<,>));
-            RegisterValidators(services, assembly);
+
+
+            services.AddValidatorsFromAssembly(assembly);
 
             // Inner dispatcher resolved by type (internal), outer wraps it with validation
             services.AddScoped<Dispatcher>();
@@ -35,19 +34,6 @@ namespace InventoryManagementSystem.Application
                 .Where(t => t is { IsClass: true, IsAbstract: false })
                 .SelectMany(t => t.GetInterfaces()
                     .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerInterfaceType)
-                    .Select(i => new { Implementation = t, Interface = i }));
-
-            foreach (var reg in registrations)
-                services.AddScoped(reg.Interface, reg.Implementation);
-        }
-        private static void RegisterValidators(IServiceCollection services, Assembly assembly)
-        {
-            var validatorType = typeof(IValidator<>);
-
-            var registrations = assembly.GetTypes()
-                .Where(t => t is { IsClass: true, IsAbstract: false })
-                .SelectMany(t => t.GetInterfaces()
-                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == validatorType)
                     .Select(i => new { Implementation = t, Interface = i }));
 
             foreach (var reg in registrations)
